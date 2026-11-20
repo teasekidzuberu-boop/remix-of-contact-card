@@ -5,9 +5,10 @@ export const Route = createFileRoute("/_admin/admin")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Admin — Manage contact card" },
+      { title: "LuxeCard Studio — Manage your identity" },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Admin — Manage contact card" },
+      { name: "description", content: "Manage your LuxeCard profile, contact details and social connections." },
+      { property: "og:title", content: "LuxeCard Studio — Manage your identity" },
       { property: "og:description", content: "Edit your digital contact card." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep visual styling in semantic global tokens and frontend presentation classes; profile actions, authentication and persistence remain independent of the visual theme.
+- Render the shared contact presentation in public pages and the existing admin preview, so both retain identical contact actions and layouts.

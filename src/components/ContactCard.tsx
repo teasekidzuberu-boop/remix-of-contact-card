@@ -16,6 +16,8 @@ import {
   QrCode,
   Share2,
   UserRound,
+  ArrowUpRight,
+  Sparkles,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -63,23 +65,24 @@ async function copyText(text: string): Promise<boolean> {
 
 function SectionTitle({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+    <h2 className="section-label">
       {children}
     </h2>
   );
 }
 
 const rowClass =
-  "flex min-h-12 items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-secondary active:bg-accent focus-visible:outline-2 focus-visible:outline-ring";
+  "contact-row";
 
 function Row({ icon, label, value, href, external }: { icon: ReactNode; label: string; value: string; href?: string; external?: boolean }) {
   const inner = (
     <>
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gold-soft text-primary">{icon}</span>
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">{icon}</span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[11px] uppercase tracking-wider text-muted-foreground">{label}</span>
-        <span className="block truncate">{value}</span>
+        <span className="block text-xs text-muted-foreground">{label}</span>
+        <span className="block break-words font-medium">{value}</span>
       </span>
+      {href && <ArrowUpRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />}
     </>
   );
   return (
@@ -104,9 +107,7 @@ export default function ContactCard({ profile, links, preview, avatarOverride }:
   const qrValue = qrTarget(profile.qr_url, cardUrl);
   const brand = safeBrandColor(profile.brand_color);
   const brandStyle = {
-    "--primary": brand,
-    "--ring": `color-mix(in oklab, ${brand} 60%, transparent)`,
-    "--gold-soft": `color-mix(in oklab, ${brand} 18%, transparent)`,
+    "--profile-accent": brand,
   } as CSSProperties;
 
   const phoneDigits = normalizePhone(profile.phone);
@@ -167,133 +168,97 @@ export default function ContactCard({ profile, links, preview, avatarOverride }:
   const subtitle = [profile.title, profile.organization].filter(Boolean).join(" · ");
 
   const body = (
-    <div className="space-y-4">
-      {/* Hero */}
-      <section className="rounded-3xl border border-border bg-card px-5 pb-6 pt-7 text-center shadow-card" aria-label="Profile">
-        <div className="mx-auto size-24 rounded-full p-[3px] ring-1 ring-primary/60">
+    <div className="identity-layout">
+      <section className="identity-intro" aria-label="Profile">
+        <div className="portrait-wrap">
           {avatarSrc ? (
-            <img src={avatarSrc} alt={`${profile.full_name || "Profile"} photo`} className="size-full rounded-full object-cover" width={96} height={96} />
+            <img src={avatarSrc} alt={`${profile.full_name || "Profile"} photo`} className="size-full object-cover" width={144} height={144} />
           ) : (
-            <div className="flex size-full items-center justify-center rounded-full bg-secondary">
-              <UserRound className="size-9 text-muted-foreground" aria-hidden />
+            <div className="portrait-placeholder"><UserRound className="size-14" aria-hidden /></div>
+          )}
+        </div>
+        <h1 className="identity-name">{profile.full_name || "Your name"}</h1>
+        {subtitle && <p className="identity-role">{subtitle}</p>}
+        {profile.location.trim() && (
+          <p className="identity-location"><MapPin className="size-3.5 shrink-0" aria-hidden />{profile.location}</p>
+        )}
+        {profile.bio.trim() && <p className="identity-bio">{profile.bio}</p>}
+        <div className="identity-actions">
+          <Button size="lg" onClick={handleSave} disabled={saving} className="save-contact">
+            {saving ? <Loader2 className="animate-spin" aria-hidden /> : <Download aria-hidden />}Save Contact
+          </Button>
+          {whatsappUrl && (
+            <Button asChild variant="outline" className="whatsapp-action">
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"><MessageCircle aria-hidden />WhatsApp<ArrowUpRight aria-hidden /></a>
+            </Button>
+          )}
+          {(telHref || smsHref) && (
+            <div className="quick-actions">
+              {telHref && <Button asChild variant="ghost"><a href={telHref}><Phone aria-hidden />Call</a></Button>}
+              {smsHref && <Button asChild variant="ghost"><a href={smsHref}><MessageSquare aria-hidden />Text</a></Button>}
             </div>
           )}
         </div>
-        <h1 className="mt-4 break-words font-display text-2xl font-semibold leading-tight text-foreground">
-          {profile.full_name || "Your name"}
-        </h1>
-        {subtitle && <p className="mt-1 text-sm font-medium text-primary">{subtitle}</p>}
-        {profile.location.trim() && (
-          <p className="mt-1.5 flex items-center justify-center gap-1 text-xs text-muted-foreground">
-            <MapPin className="size-3.5" aria-hidden /> {profile.location}
-          </p>
+      </section>
+      <div className="identity-connections">
+        {hasDetails && (
+          <section className="identity-section">
+            <SectionTitle>Contact</SectionTitle>
+            <ul className="contact-list">
+              {telHref && <Row icon={<Phone className="size-4" />} label="Phone" value={profile.phone} href={telHref} />}
+              {whatsappUrl && <Row icon={<MessageCircle className="size-4" />} label="WhatsApp" value={profile.whatsapp_number} href={whatsappUrl} external />}
+              {email && <Row icon={<Mail className="size-4" />} label="Email" value={email} href={`mailto:${email}`} />}
+              {websiteUrl && <Row icon={<Globe className="size-4" />} label="Website" value={websiteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")} href={websiteUrl} external />}
+              {profile.location.trim() && <Row icon={<MapPin className="size-4" />} label="Location" value={profile.location} />}
+            </ul>
+          </section>
         )}
-        {profile.bio.trim() && (
-          <p className="mx-auto mt-3 max-w-xs whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{profile.bio}</p>
-        )}
-
-        {/* Primary actions */}
-        <div className="mt-5 space-y-2.5">
-          <Button size="lg" onClick={handleSave} disabled={saving} className="h-12 w-full rounded-full text-base font-semibold transition-transform active:scale-[0.98]">
-            {saving ? <Loader2 className="animate-spin" aria-hidden /> : <Download aria-hidden />}
-            Save Contact
-          </Button>
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              whatsappUrl && { href: whatsappUrl, label: "WhatsApp", icon: <MessageCircle aria-hidden />, ext: true },
-              telHref && { href: telHref, label: "Call", icon: <Phone aria-hidden /> },
-              smsHref && { href: smsHref, label: "Text", icon: <MessageSquare aria-hidden /> },
-            ]
-              .filter(Boolean)
-              .map((a) => {
-                const act = a as { href: string; label: string; icon: ReactNode; ext?: boolean };
+        {safeLinks.length > 0 && (
+          <section className="identity-section social-section">
+            <SectionTitle>Social</SectionTitle>
+            <nav aria-label="Social profiles" className="social-links">
+              {safeLinks.map((link) => {
+                const Icon = platformIcon(link.platform);
                 return (
-                  <a
-                    key={act.label}
-                    href={act.href}
-                    {...(act.ext ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="flex h-14 flex-col items-center justify-center gap-1 rounded-2xl border border-border bg-secondary/60 text-xs font-medium text-foreground transition-all hover:border-primary/60 active:scale-95 focus-visible:outline-2 focus-visible:outline-ring [&_svg]:size-4 [&_svg]:text-primary"
-                  >
-                    {act.icon}
-                    {act.label}
-                  </a>
+                  <Button asChild variant="outline" key={link.id ?? `${link.platform}-${link.url}`} className="social-link">
+                    <a href={link.url.trim()} target="_blank" rel="noopener noreferrer" aria-label={platformAriaLabel(link.platform, link.url)}>
+                      <Icon className="text-primary" aria-hidden />{link.platform}<ArrowUpRight className="text-muted-foreground" aria-hidden />
+                    </a>
+                  </Button>
                 );
               })}
+            </nav>
+          </section>
+        )}
+        <section className="identity-section share-section">
+          <SectionTitle>Scan &amp; share</SectionTitle>
+          <div className="share-layout">
+            <div ref={qrRef} className="qr-panel" aria-label="QR code for this contact card" role="img">
+              {qrValue ? <QRCodeCanvas value={qrValue} size={132} level="M" marginSize={0} /> : <div className="flex size-[132px] items-center justify-center"><QrCode className="size-8 text-muted-foreground" aria-hidden /></div>}
+            </div>
+            <div className="share-actions">
+              <Button variant="outline" onClick={handleShare}><Share2 aria-hidden />Share</Button>
+              <Button variant="outline" onClick={handleCopyLink}><Copy aria-hidden />Copy link</Button>
+              <Button variant="outline" onClick={handleCopyDetails}><ClipboardCopy aria-hidden />Details</Button>
+              <Button variant="outline" onClick={handleQrDownload} disabled={!qrValue}><Download aria-hidden />QR</Button>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {hasDetails && (
-        <section className="rounded-3xl border border-border bg-card p-3 shadow-card">
-          <SectionTitle>Contact</SectionTitle>
-          <ul className="space-y-0.5">
-            {telHref && <Row icon={<Phone className="size-4" />} label="Phone" value={profile.phone} href={telHref} />}
-            {whatsappUrl && <Row icon={<MessageCircle className="size-4" />} label="WhatsApp" value={profile.whatsapp_number} href={whatsappUrl} external />}
-            {email && <Row icon={<Mail className="size-4" />} label="Email" value={email} href={`mailto:${email}`} />}
-            {websiteUrl && <Row icon={<Globe className="size-4" />} label="Website" value={websiteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")} href={websiteUrl} external />}
-            {profile.location.trim() && <Row icon={<MapPin className="size-4" />} label="Location" value={profile.location} />}
-          </ul>
         </section>
-      )}
-
-      {safeLinks.length > 0 && (
-        <section className="rounded-3xl border border-border bg-card p-3 shadow-card">
-          <SectionTitle>Social</SectionTitle>
-          <nav aria-label="Social profiles" className="flex flex-wrap gap-2 px-1 pb-1">
-            {safeLinks.map((link) => {
-              const Icon = platformIcon(link.platform);
-              return (
-                <a
-                  key={link.id ?? `${link.platform}-${link.url}`}
-                  href={link.url.trim()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={platformAriaLabel(link.platform, link.url)}
-                  className="flex h-11 items-center gap-2 rounded-full border border-border px-4 text-sm text-foreground transition-all hover:border-primary hover:text-primary active:scale-95 focus-visible:outline-2 focus-visible:outline-ring"
-                >
-                  <Icon className="size-4 text-primary" aria-hidden />
-                  {link.platform}
-                </a>
-              );
-            })}
-          </nav>
-        </section>
-      )}
-
-      <section className="rounded-3xl border border-border bg-card p-4 shadow-card">
-        <SectionTitle>Scan &amp; share</SectionTitle>
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
-          <div ref={qrRef} className="shrink-0 rounded-2xl bg-white p-2.5" aria-label="QR code for this contact card" role="img">
-            {qrValue ? (
-              <QRCodeCanvas value={qrValue} size={132} level="M" marginSize={0} fgColor="#061C17" bgColor="#ffffff" />
-            ) : (
-              <div className="flex size-[132px] items-center justify-center"><QrCode className="size-8 text-muted-foreground" aria-hidden /></div>
-            )}
-          </div>
-          <div className="grid w-full grid-cols-2 gap-2">
-            <Button variant="outline" onClick={handleShare} className="h-11 rounded-full"><Share2 aria-hidden /> Share</Button>
-            <Button variant="outline" onClick={handleCopyLink} className="h-11 rounded-full"><Copy aria-hidden /> Copy link</Button>
-            <Button variant="outline" onClick={handleCopyDetails} className="h-11 rounded-full"><ClipboardCopy aria-hidden /> Details</Button>
-            <Button variant="outline" onClick={handleQrDownload} disabled={!qrValue} className="h-11 rounded-full"><Download aria-hidden /> QR</Button>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 
-  if (preview) return <div style={brandStyle}>{body}</div>;
+  if (preview) return <div style={brandStyle} className="identity-preview">{body}</div>;
 
   return (
-    <div style={brandStyle} className="fade-in min-h-screen overflow-x-hidden bg-background px-4 pb-8 pt-4">
-      <div className="rise mx-auto w-full max-w-md">
-        <header className="mb-4 flex items-center justify-between">
-          <span className="font-display text-lg font-semibold tracking-tight text-foreground">
-            Luxe<span className="text-primary">Card</span>
-          </span>
+    <div style={brandStyle} className="identity-page fade-in">
+      <div className="identity-shell rise">
+        <header className="identity-header">
+          <span className="brand-lockup"><span className="brand-symbol"><Sparkles className="size-5" aria-hidden /></span><span>Luxe<span className="text-primary">Card</span></span></span>
           <ThemeToggle />
         </header>
         <main>{body}</main>
-        <footer className="mt-6 text-center text-xs text-muted-foreground">
+        <footer className="identity-footer">
           © {new Date().getFullYear()} {profile.full_name} · LuxeCard ·{" "}
           <a href="/admin/login" className="underline-offset-2 hover:text-primary hover:underline">Admin</a>
         </footer>

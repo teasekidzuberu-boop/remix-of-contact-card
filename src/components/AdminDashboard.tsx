@@ -332,10 +332,10 @@ export default function AdminDashboard() {
   const field = "bg-background/60";
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-10 border-b border-border bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3">
-          <h1 className="truncate font-display text-lg font-semibold text-foreground">Luxe<span className="text-primary">Card</span> admin</h1>
+    <div className="admin-page min-h-screen bg-background">
+      <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-5 py-5">
+          <h1 className="truncate font-display text-lg font-semibold text-foreground">Luxe<span className="text-primary">Card</span><span className="ml-3 border-l border-border pl-3 text-xs font-medium text-muted-foreground">Studio</span></h1>
           <div className="flex items-center gap-2">
             <Button asChild variant="outline" size="sm">
               <Link to="/p/$slug" params={{ slug: form.slug }} target="_blank" rel="noopener noreferrer">
@@ -349,7 +349,7 @@ export default function AdminDashboard() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 pb-28 lg:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="mx-auto grid max-w-6xl gap-12 px-5 py-10 pb-28 lg:grid-cols-[minmax(0,1fr)_380px]">
       <main className="min-w-0 space-y-6">
         {!form.published && (
           <div
@@ -362,8 +362,8 @@ export default function AdminDashboard() {
         )}
 
         {/* Identity */}
-        <section className="rounded-2xl border border-border bg-card p-5" aria-labelledby="identity-heading">
-          <h2 id="identity-heading" className="mb-4 text-sm font-semibold uppercase tracking-widest text-primary">
+        <section className="admin-section" aria-labelledby="identity-heading">
+          <h2 id="identity-heading" className="mb-4 text-base font-semibold text-foreground">
             Identity
           </h2>
           <div className="space-y-4">
@@ -428,8 +428,8 @@ export default function AdminDashboard() {
         </section>
 
         {/* Contact */}
-        <section className="rounded-2xl border border-border bg-card p-5" aria-labelledby="contact-heading">
-          <h2 id="contact-heading" className="mb-4 text-sm font-semibold uppercase tracking-widest text-primary">
+        <section className="admin-section" aria-labelledby="contact-heading">
+          <h2 id="contact-heading" className="mb-4 text-base font-semibold text-foreground">
             Contact details
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -461,9 +461,9 @@ export default function AdminDashboard() {
         </section>
 
         {/* Social links */}
-        <section className="rounded-2xl border border-border bg-card p-5" aria-labelledby="links-heading">
+        <section className="admin-section" aria-labelledby="links-heading">
           <div className="mb-4 flex items-center justify-between">
-            <h2 id="links-heading" className="text-sm font-semibold uppercase tracking-widest text-primary">
+            <h2 id="links-heading" className="text-base font-semibold text-foreground">
               Social links
             </h2>
             <Button variant="outline" size="sm" onClick={addLink}>
@@ -477,26 +477,26 @@ export default function AdminDashboard() {
           ) : (
             <ul className="space-y-3">
               {links.map((link, index) => (
-                <li key={link._key} className="flex items-center gap-2">
+                <li key={link._key} className="social-editor-row">
                   <div className="flex flex-col">
-                    <button
+                    <Button variant="ghost"
                       type="button"
                       aria-label="Move link up"
                       disabled={index === 0}
                       onClick={() => moveLink(index, -1)}
-                      className="rounded p-0.5 text-muted-foreground hover:text-primary disabled:opacity-30"
+                      className="size-7 p-0 text-muted-foreground hover:text-primary disabled:opacity-30"
                     >
                       <ArrowUp className="size-3.5" aria-hidden />
-                    </button>
-                    <button
+                    </Button>
+                    <Button variant="ghost"
                       type="button"
                       aria-label="Move link down"
                       disabled={index === links.length - 1}
                       onClick={() => moveLink(index, 1)}
-                      className="rounded p-0.5 text-muted-foreground hover:text-primary disabled:opacity-30"
+                      className="size-7 p-0 text-muted-foreground hover:text-primary disabled:opacity-30"
                     >
                       <ArrowDown className="size-3.5" aria-hidden />
-                    </button>
+                    </Button>
                   </div>
                   <select
                     aria-label={`Platform for link ${index + 1}`}
@@ -533,8 +533,8 @@ export default function AdminDashboard() {
         </section>
 
         {/* Branding & QR */}
-        <section className="rounded-2xl border border-border bg-card p-5" aria-labelledby="brand-heading">
-          <h2 id="brand-heading" className="mb-4 text-sm font-semibold uppercase tracking-widest text-primary">
+        <section className="admin-section" aria-labelledby="brand-heading">
+          <h2 id="brand-heading" className="mb-4 text-base font-semibold text-foreground">
             Brand &amp; QR code
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -560,9 +560,9 @@ export default function AdminDashboard() {
         </section>
 
         {/* Visibility */}
-        <section className="flex items-center justify-between rounded-2xl border border-border bg-card p-5" aria-labelledby="visibility-heading">
+        <section className="flex items-center justify-between admin-section" aria-labelledby="visibility-heading">
           <div>
-            <h2 id="visibility-heading" className="flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-primary">
+            <h2 id="visibility-heading" className="flex items-center gap-2 text-base font-semibold text-foreground">
               {form.published ? <Eye className="size-4" aria-hidden /> : <EyeOff className="size-4" aria-hidden />}
               Visibility
             </h2>
@@ -579,7 +579,7 @@ export default function AdminDashboard() {
       </main>
       <aside aria-label="Live preview" className="lg:sticky lg:top-20 lg:self-start">
         <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Live preview</p>
-        <div className="rounded-3xl border border-border bg-background p-3 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+        <div className="preview-frame lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
           <ContactCard
             preview
             avatarOverride={photoPreview ?? (avatarPath ? `/api/public/profile-photo/${avatarPath}?v=${avatarVersion}` : null)}
@@ -591,12 +591,12 @@ export default function AdminDashboard() {
       </div>
 
       {/* Sticky save bar */}
-      <div className="fixed inset-x-0 bottom-0 border-t border-border bg-background/95 p-4 backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 border-t border-border bg-card/85 p-4 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
           <p className="hidden text-xs text-muted-foreground sm:block">
             Changes go live on the public card after saving.
           </p>
-          <Button onClick={handleSave} disabled={saving} className="ml-auto h-11 min-w-40 rounded-full font-semibold">
+          <Button onClick={handleSave} disabled={saving} className="ml-auto h-11 min-w-40 rounded-lg font-semibold">
             {saving ? (
               <>
                 <Loader2 className="animate-spin" aria-hidden /> Saving…

@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
   head: ({ loaderData }) => {
     const name = loaderData?.profile.full_name;
     const role = loaderData?.profile.title;
-    const title = name ? `${name}${role ? ` — ${role}` : " — Contact Card"}` : "Contact Card";
+    const title = name ? `${name}${role ? ` — ${role}` : " — Contact Card"}` : "LuxeCard — Digital identity";
     const description = name
       ? `Save ${name}'s contact details${role ? ` · ${role}` : ""} — phone, email, WhatsApp and more.`
       : "Personal digital contact card.";
@@ -30,8 +30,9 @@ function HomePage() {
 
   if (!data) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4 text-center">
-        <div>
+      <div className="empty-page">
+        <div className="empty-content">
+          <div className="auth-brand">Luxe<span className="text-primary">Card</span></div>
           <h1 className="font-display text-2xl text-foreground">Contact card unavailable</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             This card hasn't been published yet.

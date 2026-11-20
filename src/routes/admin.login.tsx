@@ -15,9 +15,10 @@ export const Route = createFileRoute("/admin/login")({
   }),
   head: () => ({
     meta: [
-      { title: "Admin — Sign in" },
+      { title: "LuxeCard — Admin sign in" },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Admin — Sign in" },
+      { name: "description", content: "Securely manage your LuxeCard digital identity." },
+      { property: "og:title", content: "LuxeCard — Admin sign in" },
       { property: "og:description", content: "Administrative sign in." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -93,10 +94,11 @@ function AdminLogin() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="rise w-full max-w-sm">
-        <div className="rounded-3xl border border-border bg-card p-8 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)]">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-gold-soft">
+    <div className="auth-page">
+      <div className="auth-shell rise">
+        <div className="auth-brand">Luxe<span className="text-primary">Card</span></div>
+        <div className="auth-panel">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-xl bg-primary/10">
             <Lock className="size-5 text-primary" aria-hidden />
           </div>
           <h1 className="mt-5 text-center font-display text-3xl text-foreground">Admin</h1>
@@ -146,7 +148,7 @@ function AdminLogin() {
               </p>
             )}
 
-            <Button type="submit" disabled={loading} className="h-11 w-full rounded-full font-semibold">
+            <Button type="submit" disabled={loading} className="h-11 w-full rounded-lg font-semibold">
               {loading ? (
                 <>
                   <Loader2 className="animate-spin" aria-hidden />

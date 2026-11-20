@@ -17,9 +17,10 @@ export const Route = createFileRoute("/admin/setup")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Admin — First-time setup" },
+      { title: "LuxeCard — First-time setup" },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Admin — First-time setup" },
+      { name: "description", content: "Securely manage your LuxeCard digital identity." },
+      { property: "og:title", content: "LuxeCard — First-time setup" },
       { property: "og:description", content: "One-time administrative account setup." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -95,10 +96,11 @@ function AdminSetup() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="rise w-full max-w-sm">
-        <div className="rounded-3xl border border-border bg-card p-8 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)]">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-gold-soft">
+    <div className="auth-page">
+      <div className="auth-shell rise">
+        <div className="auth-brand">Luxe<span className="text-primary">Card</span></div>
+        <div className="auth-panel">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-xl bg-primary/10">
             {status === "loading" || status.available ? (
               <KeyRound className="size-5 text-primary" aria-hidden />
             ) : (
@@ -198,7 +200,7 @@ function AdminSetup() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-11 w-full rounded-full font-semibold"
+                className="h-11 w-full rounded-lg font-semibold"
               >
                 {loading ? (
                   <>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+
 const KEY = "luxecard-theme";
 
 export default function ThemeToggle() {
@@ -20,13 +22,14 @@ export default function ThemeToggle() {
   };
 
   return (
-    <button
+    <Button variant="ghost" size="icon"
       type="button"
       onClick={toggle}
+      title={light ? "Switch to dark theme" : "Switch to light theme"}
       aria-label={light ? "Switch to dark theme" : "Switch to light theme"}
       className="flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-ring active:scale-95"
     >
       {light ? <Moon className="size-4" aria-hidden /> : <Sun className="size-4" aria-hidden />}
-    </button>
+    </Button>
   );
 }
