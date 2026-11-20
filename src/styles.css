@@ -1,0 +1,138 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system — Emerald Prestige.
+ * Deep emerald background, cream type, gold accents. All colors are oklch tokens.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold-soft: var(--gold-soft);
+  --color-success: var(--success);
+  --shadow-card: var(--shadow-card);
+
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 1rem;
+  /* LuxeCard — emerald #061C17, forest #10392D, champagne #D7B56D, ivory #F5F1E7, sage */
+  --background: oklch(0.2 0.03 170);
+  --foreground: oklch(0.96 0.015 90);
+  --card: oklch(0.29 0.045 165);
+  --card-foreground: oklch(0.96 0.015 90);
+  --popover: oklch(0.27 0.045 165);
+  --popover-foreground: oklch(0.96 0.015 90);
+  --primary: #d7b56d;
+  --primary-foreground: oklch(0.2 0.03 170);
+  --secondary: oklch(0.34 0.045 165);
+  --secondary-foreground: oklch(0.96 0.015 90);
+  --muted: oklch(0.32 0.04 165);
+  --muted-foreground: oklch(0.78 0.03 150); /* muted sage */
+  --accent: oklch(0.38 0.05 165);
+  --accent-foreground: oklch(0.96 0.015 90);
+  --destructive: oklch(0.62 0.19 25);
+  --destructive-foreground: oklch(0.96 0.015 90);
+  --border: oklch(0.96 0.015 90 / 10%);
+  --input: oklch(0.96 0.015 90 / 16%);
+  --ring: color-mix(in oklab, var(--primary) 60%, transparent);
+  --gold-soft: color-mix(in oklab, var(--primary) 22%, transparent);
+  --success: oklch(0.75 0.15 155);
+  --shadow-card: 0 1px 0 oklch(1 0 0 / 4%) inset, 0 24px 48px -28px oklch(0 0 0 / 70%);
+}
+
+.light {
+  --background: oklch(0.96 0.015 90);
+  --foreground: oklch(0.22 0.035 168);
+  --card: oklch(0.99 0.008 90);
+  --card-foreground: oklch(0.22 0.035 168);
+  --popover: oklch(0.99 0.008 90);
+  --popover-foreground: oklch(0.22 0.035 168);
+  --primary-foreground: oklch(0.2 0.03 170);
+  --secondary: oklch(0.92 0.02 120);
+  --secondary-foreground: oklch(0.22 0.035 168);
+  --muted: oklch(0.93 0.015 120);
+  --muted-foreground: oklch(0.45 0.035 160);
+  --accent: oklch(0.9 0.025 140);
+  --accent-foreground: oklch(0.22 0.035 168);
+  --border: oklch(0.22 0.035 168 / 12%);
+  --input: oklch(0.22 0.035 168 / 18%);
+  --shadow-card: 0 20px 40px -28px oklch(0.22 0.035 168 / 35%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-gold-soft);
+    color: var(--color-foreground);
+  }
+}
+
+@utility rise {
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
