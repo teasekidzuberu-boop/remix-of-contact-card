@@ -25,7 +25,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { buildVCard, vCardFileName } from "@/lib/vcard";
 import { buildWhatsAppUrl, normalizePhone } from "@/lib/phone";
 import { isValidExternalUrl, platformIcon, platformAriaLabel } from "@/lib/social";
-import { contactDetailsText, qrTarget, safeBrandColor } from "@/lib/brand";
+import { contactDetailsText, qrTarget, safeBrandColor, DEFAULT_BRAND_COLOR } from "@/lib/brand";
 import type { PublicProfile, SocialLink } from "@/lib/types";
 
 interface ContactCardProps {
@@ -107,7 +107,7 @@ export default function ContactCard({ profile, links, preview, avatarOverride }:
   const qrValue = qrTarget(profile.qr_url, cardUrl);
   const brand = safeBrandColor(profile.brand_color);
   const brandStyle = {
-    "--profile-accent": brand,
+    "--profile-accent": brand.toLowerCase() === DEFAULT_BRAND_COLOR.toLowerCase() ? "var(--primary)" : brand,
   } as CSSProperties;
 
   const phoneDigits = normalizePhone(profile.phone);
